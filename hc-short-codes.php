@@ -1,12 +1,12 @@
 <?php
 /*
-Plugin Name: Paid Memberships Pro: Harp Column Short Codes
+Plugin Name: Harp Column Short Codes
 Plugin URI: http://www.harpcolumn.com
 Description: Short codes to display custom membership data for Harp Column
 Version: 1.0
 Requires: 4.5.3
 Author: Hugh Brock <hbrock@harpcolumn.com>
-Author URI: http://wwwharpcolumn.com
+Author URI: http://www.hewbrocca.com
 License: GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -56,9 +56,40 @@ function pmpro_expiration_date_shortcode( $atts ) {
 
 add_shortcode('pmpro_expiration_date', 'pmpro_expiration_date_shortcode');
   
+/*
+Shortcode to return: 
+  ** text "notloggedin" if user is not logged in
+  ** text "loggedin" if user is logged in but not a current member
+  ** text "member" if user is a current member
+*/
+
+function hc_login_conditional_text_shortcode ($atts) {
+    
+    $a = shortcode_atts( array('notloggedin' => '', 'loggedin' => '', 'member' => '',), $atts, 'hc_login_conditional_text');
+    
+    $user_id = get_current_user_id();
+
+    //no user ID? bail
+    if(!$user_id)
+	return $a['notloggedin'];
+
+    //make sure PMPro is active, if not return "logged in" string
+    if(!function_exists('pmpro_getMembershipLevelForUser'))
+	return $a['loggedin'];
+
+    //get the user's level
+    $level = pmpro_getMembershipLevelForUser($user_id);
+
+    if(!empty($level) && ($level->id == 1 || $level->id == 17))
+	return $a['member'];
+    else
+	return $a['loggedin'];
+
+}
+add_shortcode('hc_login_conditional_text', 'hc_login_conditional_text_shortcode');
 
 /*
-	Shortcode to show membership account information
+Shortcode to show membership account information
 */
 function pmpro_hc_shortcode_account($atts, $content=null, $code="")
 {
