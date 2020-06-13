@@ -363,11 +363,31 @@ function pmpro_status_widget() {
     if(!function_exists('pmpro_getMembershipLevelsForUser'))
 	return;
     
-    $user_id = get_current_user_id();
+    //get attributes                                                                                
+    $a = shortcode_atts( array(
+        'user' => '',
+    ), $atts );
+
+    //find user                                                                                     
+    if(!empty($a['user']) && is_numeric($a['user'])) {
+        $user_id = $a['user'];
+    } elseif(!empty($a['user']) && strpos($a['user'], '@') !== false) {
+        $user = get_user_by('email', $a['user']);
+        $user_id = $user->ID;
+    } elseif(!empty($a['user'])) {
+        $user = get_user_by('login', $a['user']);
+        $user_id = $user->ID;
+    } else {
+        $user_id = false;
+    }
 
     //no user ID? bail
     if(!$user_id)
 	return '<a href="/academy/my-account">Login</a> | <a href="/academy/get-started">Join</a>';
+
+    // logged in but no membership
+    if(!pmpro_hasMembershipLevel())
+	return 'Hello' . $user->first_name . '! | <a href="/academy/get-started">Get Started With HCA</a>';
 
     //get the user's levels, only do something if they're level 17
     $mylevels = pmpro_getMembershipLevelsForUser();
