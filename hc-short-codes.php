@@ -360,7 +360,7 @@ add_shortcode('pmpro_expire_text', 'pmpro_expire_text_shortcode');
 function pmpro_status_widget() {
 
     //make sure PMPro is active
-    if(!function_exists('pmpro_getMembershipsLevelForUser'))
+    if(!function_exists('pmpro_getMembershipLevelsForUser'))
 	return;
     
     $user_id = get_current_user_id();
