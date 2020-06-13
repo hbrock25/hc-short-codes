@@ -343,9 +343,9 @@ function pmpro_expire_text_shortcode( $atts ) {
 
     // Only show this to users with level 17, otherwise use the Woo shortcode.
     $mylevels = pmpro_getMembershipLevelsForUser();
-    content = "";
+    $content = "";
     foreach ($mylevels as $level) {
-	if( $level->id = 17 && !empty($level->enddate)) {
+	if( $level->id == 17 && !empty($level->enddate)) {
             $content = "<p><strong>Your membership level:</strong> " . $level->name . "<br /><strong>Expires: </strong> " . date(get_option('date_format'), $level->enddate) . "</p>";
 	}
     }
