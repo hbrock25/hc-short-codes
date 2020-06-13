@@ -279,7 +279,23 @@ function pmpro_level_name_shortcode( $atts ) {
     if(!function_exists('pmpro_getMembershipLevelForUser'))
         return;
 
-    $user_id = get_current_user_id();
+    //get attributes                                                                                
+    $a = shortcode_atts( array(
+        'user' => '',
+    ), $atts );
+
+    //find user                                                                                     
+    if(!empty($a['user']) && is_numeric($a['user'])) {
+        $user_id = $a['user'];
+    } elseif(!empty($a['user']) && strpos($a['user'], '@') !== false) {
+        $user = get_user_by('email', $a['user']);
+        $user_id = $user->ID;
+    } elseif(!empty($a['user'])) {
+        $user = get_user_by('login', $a['user']);
+        $user_id = $user->ID;
+    } else {
+        $user_id = false;
+    }
 
     //no user ID? bail                                                                              
     if(!isset($user_id))
@@ -344,22 +360,26 @@ add_shortcode('pmpro_expire_text', 'pmpro_expire_text_shortcode');
 function pmpro_status_widget() {
 
     //make sure PMPro is active
-    if(!function_exists('pmpro_getMembershipLevelForUser'))
+    if(!function_exists('pmpro_getMembershipsLevelForUser'))
 	return;
     
     $user_id = get_current_user_id();
 
     //no user ID? bail
     if(!$user_id)
-	return '<a href="/academy/my-account">Login</a> | <a href="/academy/join">Join</a>';
+	return '<a href="/academy/my-account">Login</a> | <a href="/academy/get-started">Join</a>';
 
-    //get the user's level
-    $level = pmpro_getMembershipLevelForUser($user_id);
-
-    if(!empty($level) && !empty($level->enddate) && $level->id > 1)
-	$content = 'Your HCA membership expires on ' . date(get_option('date_format'), $level->enddate) . '. | <a href="/academy/renew">Renew</a> | <a href="/academy/my-account">My Account</a> | <a href="' . wc_logout_url() . '">Logout</a>';
-    else
-	$content = '<a href="/academy/join">Join</a> | <a href="/academy/my-account">My Account</a> | <a href="' . wc_logout_url() . '">Logout</a>';
-
+    //get the user's levels, only do something if they're level 17
+    $mylevels = pmpro_getMembershipLevelsForUser();
+    $content = "";
+    foreach ($mylevels as $level) {
+	if( $level->id == 17 && !empty($level->enddate)) {
+	    $content = 'Your HCA Founding Membership expires on ' . date(get_option('date_format'), $level->enddate) . '. | <a href="/academy/current-members">Renew</a> | <a href="/academy/my-account">My Account</a> | <a href="' . wc_logout_url() . '">Logout</a>';
+	    else
+		$content = '<a href="/academy/join">Join</a> | <a href="/academy/my-account">My Account</a> | <a href="' . wc_logout_url() . '">Logout</a>';
+	}
+    }
     return $content;
 }
+
+add_shortcode('hc_pmpro_status_widget', 'pmpro_status_widget');
