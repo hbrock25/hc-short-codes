@@ -372,7 +372,7 @@ function pmpro_status_widget() {
 
     // logged in but no membership
     if(!pmpro_hasMembershipLevel())
-	return 'Hello' . $user->first_name . '! | <a href="/academy/get-started">Get Started With HCA</a>';
+	return 'Hello ' . $user->first_name . '! | <a href="/academy/get-started">Get Started With HCA</a>';
 
     //get the user's levels, only do something if they're level 17
     $mylevels = pmpro_getMembershipLevelsForUser();
