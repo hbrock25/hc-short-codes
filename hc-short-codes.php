@@ -274,46 +274,6 @@ function stop_non_pmpro_members_from_buying_woo( $is_purchasable, $product ) {
 
 add_filter( 'woocommerce_is_purchasable', 'stop_non_pmpro_members_from_buying_woo', 10, 2 );
 
-function pmpro_expiration_date_shortcode( $atts ) {
-    //make sure PMPro is active
-    if(!function_exists('pmpro_getMembershipLevelForUser'))
-	return;
-    
-    //get attributes
-    $a = shortcode_atts( array(
-	'user' => '',
-    ), $atts );
-    
-    //find user
-    if(!empty($a['user']) && is_numeric($a['user'])) {
-	$user_id = $a['user'];
-    } elseif(!empty($a['user']) && strpos($a['user'], '@') !== false) {
-	$user = get_user_by('email', $a['user']);
-	$user_id = $user->ID;
-    } elseif(!empty($a['user'])) {
-	$user = get_user_by('login', $a['user']);
-	$user_id = $user->ID;
-    } else {
-	$user_id = false;
-    }
-    
-    //no user ID? bail
-    if(!isset($user_id))
-	return;
-
-    //get the user's level
-    $level = pmpro_getMembershipLevelForUser($user_id);
-
-    if(!empty($level) && !empty($level->enddate))
-	$content = date(get_option('date_format'), $level->enddate);
-    else
-	$content = "---";
-
-    return $content;
-}
-
-add_shortcode('pmpro_expiration_date', 'pmpro_expiration_date_shortcode');
-
 function pmpro_level_name_shortcode( $atts ) {
     //make sure PMPro is active                                                                     
     if(!function_exists('pmpro_getMembershipLevelForUser'))
