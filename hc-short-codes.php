@@ -362,28 +362,13 @@ function pmpro_status_widget() {
     //make sure PMPro is active
     if(!function_exists('pmpro_getMembershipLevelsForUser'))
 	return;
-    
-    //get attributes                                                                                
-    $a = shortcode_atts( array(
-        'user' => '',
-    ), $atts );
-
-    //find user                                                                                     
-    if(!empty($a['user']) && is_numeric($a['user'])) {
-        $user_id = $a['user'];
-    } elseif(!empty($a['user']) && strpos($a['user'], '@') !== false) {
-        $user = get_user_by('email', $a['user']);
-        $user_id = $user->ID;
-    } elseif(!empty($a['user'])) {
-        $user = get_user_by('login', $a['user']);
-        $user_id = $user->ID;
-    } else {
-        $user_id = false;
-    }
 
     //no user ID? bail
-    if(!isset($user_id))
+    if(!is_user_logged_in()) {
 	return '<a href="/academy/my-account">Login</a> | <a href="/academy/get-started">Join</a>';
+    }
+
+    $user = wp_get_current_user();
 
     // logged in but no membership
     if(!pmpro_hasMembershipLevel())
