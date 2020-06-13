@@ -375,8 +375,7 @@ function pmpro_status_widget() {
     foreach ($mylevels as $level) {
 	if( $level->id == 17 && !empty($level->enddate)) {
 	    $content = 'Your HCA Founding Membership expires on ' . date(get_option('date_format'), $level->enddate) . '. | <a href="/academy/current-members">Renew</a> | <a href="/academy/my-account">My Account</a> | <a href="' . wc_logout_url() . '">Logout</a>';
-	} {
-	    else
+	} else {
 		$content = '<a href="/academy/join">Join</a> | <a href="/academy/my-account">My Account</a> | <a href="' . wc_logout_url() . '">Logout</a>';
 	}
     }
