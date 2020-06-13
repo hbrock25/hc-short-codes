@@ -279,23 +279,7 @@ function pmpro_level_name_shortcode( $atts ) {
     if(!function_exists('pmpro_getMembershipLevelForUser'))
         return;
 
-    //get attributes                                                                                
-    $a = shortcode_atts( array(
-        'user' => '',
-    ), $atts );
-
-    //find user                                                                                     
-    if(!empty($a['user']) && is_numeric($a['user'])) {
-        $user_id = $a['user'];
-    } elseif(!empty($a['user']) && strpos($a['user'], '@') !== false) {
-        $user = get_user_by('email', $a['user']);
-        $user_id = $user->ID;
-    } elseif(!empty($a['user'])) {
-        $user = get_user_by('login', $a['user']);
-        $user_id = $user->ID;
-    } else {
-        $user_id = false;
-    }
+    $user_id = get_current_user_id();
 
     //no user ID? bail                                                                              
     if(!isset($user_id))
