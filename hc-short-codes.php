@@ -190,7 +190,7 @@ function my_login_redirect( $redirect_to, $request, $user ) {
     return $redirect_to;
 }
 
-add_filter( 'login_redirect', 'my_login_redirect', 10, 3 );
+// add_filter( 'login_redirect', 'my_login_redirect', 10, 3 );
 
 /**
  * Redirect users to custom URL based on their role after login
@@ -228,7 +228,7 @@ function wc_custom_user_redirect( $redirect, $user ) {
 
 	return $redirect;
 }
-add_filter( 'woocommerce_login_redirect', 'wc_custom_user_redirect', 10, 2 );
+// add_filter( 'woocommerce_login_redirect', 'wc_custom_user_redirect', 10, 2 );
 
 /**
  * Redirect after registration.
@@ -243,7 +243,7 @@ function iconic_register_redirect( $redirect ) {
     return wc_get_page_permalink( 'shop' );
 }
 
-add_filter( 'woocommerce_registration_redirect', 'iconic_register_redirect' );
+// add_filter( 'woocommerce_registration_redirect', 'iconic_register_redirect' );
 
 /** 
  *  Stop non-members from purchasing products if they do not have an active Paid Memberships Pro Level.
@@ -316,7 +316,7 @@ add_shortcode('pmpro_level_name', 'pmpro_level_name_shortcode');
 
 function pmpro_expire_text_shortcode( $atts ) {
     //make sure PMPro is active                                                                     
-    if(!function_exists('pmpro_getMembershipLevelForUser'))
+    if(!function_exists('pmpro_getMembershipLevelsForUser'))
         return;
 
     //get attributes                                                                                
@@ -341,14 +341,14 @@ function pmpro_expire_text_shortcode( $atts ) {
     if(!isset($user_id))
         return;
 
-    //get the user's level                                                                          
-    $level = pmpro_getMembershipLevelForUser($user_id);
-
-    if(!empty($level) && !empty($level->enddate))
-        $content = "<p><strong>Your membership level:</strong> " . $level->name . "<br /><strong>Expires: </strong> " . date(get_option('date_format'), $level->enddate) . "</p>";
-    else
-        $content = "";
-
+    // Only show this to users with level 17, otherwise use the Woo shortcode.
+    $mylevels = pmpro_getMembershipLevelsForUser();
+    content = "";
+    foreach ($mylevels as $level) {
+	if( $level->id = 17 && !empty($level->enddate)) {
+            $content = "<p><strong>Your membership level:</strong> " . $level->name . "<br /><strong>Expires: </strong> " . date(get_option('date_format'), $level->enddate) . "</p>";
+	}
+    }
     return $content;
 }
 
