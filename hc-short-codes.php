@@ -382,7 +382,7 @@ function pmpro_status_widget() {
     }
 
     //no user ID? bail
-    if(!$user_id)
+    if(!isset($user_id))
 	return '<a href="/academy/my-account">Login</a> | <a href="/academy/get-started">Join</a>';
 
     // logged in but no membership
