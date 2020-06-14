@@ -3,7 +3,7 @@
    Plugin Name: Harp Column Short Codes
    Plugin URI: http://www.harpcolumn.com
    Description: Short codes to display custom membership data for Harp Column
-   Version: 1.0
+   Version: 1.0.1
    Requires: 4.5.3
    Author: Hugh Brock <hbrock@harpcolumn.com>
    Author URI: http://www.hewbrocca.com
@@ -342,11 +342,13 @@ function pmpro_expire_text_shortcode( $atts ) {
         return;
 
     // Only show this to users with level 17, otherwise use the Woo shortcode.
-    $mylevels = pmpro_getMembershipLevelsForUser();
     $content = "";
-    foreach ($mylevels as $level) {
-	if( $level->id == 17 && !empty($level->enddate)) {
-            $content = "<p><strong>Your membership level:</strong> " . $level->name . "<br /><strong>Expires: </strong> " . date(get_option('date_format'), $level->enddate) . "</p>";
+    if (pmpro_hasMembershipLevel()) {
+	$mylevels = pmpro_getMembershipLevelsForUser();
+	foreach ($mylevels as $level) {
+	    if( $level->id == 17 && !empty($level->enddate)) {
+		$content = "<p><strong>Your membership level:</strong> " . $level->name . "<br /><strong>Expires: </strong> " . date(get_option('date_format'), $level->enddate) . "</p>";
+	    }
 	}
     }
     return $content;
