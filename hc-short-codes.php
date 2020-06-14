@@ -255,14 +255,14 @@ function stop_non_pmpro_members_from_buying_woo( $is_purchasable, $product ) {
     // just change it to false for the cases we definitely want to deny.
 
     // Product requires an all access membership (1) or a founding membership (17)
-    if( has_term( 'membership-required', 'product_cat', $product->id ) ) {
+    if( has_term( 'membership-required', 'product_cat', $product->get_id() ) ) {
         if ( ! pmpro_hasMembershipLevel(1) && ! pmpro_hasMembershipLevel(17)) {
 	    $is_purchasable = false;
 	}
     }
 
     // Product requires a founding membership (17)
-    if( has_term( 'founding-member', 'product_cat', $product->id ) ) {
+    if( has_term( 'founding-member', 'product_cat', $product->get_id() ) ) {
         if ( ! pmpro_hasMembershipLevel(17)) {
 	    $is_purchasable = false;
 	}
