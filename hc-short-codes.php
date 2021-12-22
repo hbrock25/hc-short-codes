@@ -391,3 +391,22 @@ function hc_login_conditional_text_shortcode ($atts) {
 
 }
 add_shortcode('hc_login_conditional_text', 'hc_login_conditional_text_shortcode');
+
+/*
+   Shortcode to return: 
+ ** "Sign in" link if user is not logged in
+ ** "My Account" link if user is logged in
+ */
+
+function hc_sign_in_my_account_shortcode ($atts) {
+    
+    $user_id = get_current_user_id();
+
+    if(!$user_id) {
+	return "Sign in";
+    } else {
+	return "My Account";
+    }
+}
+
+add_shortcode('hc_sign_in_my_account', 'hc_sign_in_my_account_shortcode');
