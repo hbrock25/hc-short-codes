@@ -3,10 +3,11 @@
    Plugin Name: Harp Column Short Codes
    Plugin URI: http://www.harpcolumn.com
    Description: Short codes to display custom membership data for Harp Column
-   Version: 1.0.2
+   Version: 1.0.3
    Requires: 4.5.3
    Author: Hugh Brock <hbrock@harpcolumn.com>
    Author URI: http://www.hewbrocca.com
+   GitHub Plugin URI: hbrock25/hc-short-codes
    License: GPL2
    License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
